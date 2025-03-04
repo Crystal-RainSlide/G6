@@ -277,11 +277,9 @@ export abstract class BaseEdge extends BaseElement<BaseEdgeStyleProps> implement
     }
 
     const _controlPoints = typeof controlPoints === 'function' ? controlPoints() : controlPoints;
-    const sourcePoint = getConnectionPoint(sourcePort || sourceNode, _controlPoints[0] || targetPort || targetNode);
-    const targetPoint = getConnectionPoint(
-      targetPort || targetNode,
-      _controlPoints[_controlPoints.length - 1] || sourcePort || sourceNode,
-    );
+    const [source, target] = [sourcePort || sourceNode, targetPort || targetNode];
+    const sourcePoint = getConnectionPoint(source, _controlPoints[0] || target);
+    const targetPoint = getConnectionPoint(target, _controlPoints.at(-1) || source);
 
     return [sourcePoint, targetPoint];
   }
@@ -299,14 +297,9 @@ export abstract class BaseEdge extends BaseElement<BaseEdgeStyleProps> implement
     if (attributes.label === false || !attributes.labelText) return false;
 
     const labelStyle = subStyleProps<Required<EdgeLabelStyleProps>>(this.getGraphicStyle(attributes), 'label');
-    const { placement, offsetX, offsetY, autoRotate, maxWidth, ...restStyle } = labelStyle;
-    const labelPositionStyle = getLabelPositionStyle(
-      this.shapeMap.key as EdgeKey,
-      placement,
-      autoRotate,
-      offsetX,
-      offsetY,
-    );
+    const { placement, autoRotate, offsetX, offsetY, maxWidth, ...restStyle } = labelStyle;
+    const key = this.shapeMap.key as EdgeKey;
+    const labelPositionStyle = getLabelPositionStyle(key, placement, autoRotate, offsetX, offsetY);
 
     const bbox = this.shapeMap.key.getLocalBounds();
     const wordWrapWidth = getWordWrapWidthByEnds([bbox.min, bbox.max], maxWidth);
@@ -330,7 +323,7 @@ export abstract class BaseEdge extends BaseElement<BaseEdgeStyleProps> implement
 
   protected drawArrow(attributes: ParsedBaseEdgeStyleProps, type: 'start' | 'end') {
     const isStart = type === 'start';
-    const arrowType = type === 'start' ? 'startArrow' : 'endArrow';
+    const arrowType = isStart ? 'startArrow' : 'endArrow';
     const enable = attributes[arrowType];
 
     const keyShape = this.shapeMap.key as Path;

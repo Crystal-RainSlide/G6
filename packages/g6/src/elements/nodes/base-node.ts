@@ -220,8 +220,7 @@ export abstract class BaseNodeLike<S extends BaseNodeStyleProps = BaseNodeStyleP
     super(mergeOptions({ style: BaseNode.defaultStyleProps }, options));
   }
 
-  protected getSize(attributes = this.attributes) {
-    const { size } = attributes;
+  protected getSize({ size } = this.attributes) {
     return parseSize(size);
   }
 
@@ -268,9 +267,7 @@ export abstract class BaseNodeLike<S extends BaseNodeStyleProps = BaseNodeStyleP
     const badges = subObject(this.shapeMap, 'badge-');
     const badgesShapeStyle: Record<string, NodeBadgeStyleProps | false> = {};
 
-    Object.keys(badges).forEach((key) => {
-      badgesShapeStyle[key] = false;
-    });
+    Object.keys(badges).forEach((key) => (badgesShapeStyle[key] = false));
     if (attributes.badge === false || !attributes.badges?.length) return badgesShapeStyle;
 
     const { badges: badgeOptions = [], badgePalette, opacity = 1, ...restAttributes } = attributes;
@@ -300,15 +297,12 @@ export abstract class BaseNodeLike<S extends BaseNodeStyleProps = BaseNodeStyleP
     const ports = this.getPorts();
     const portsShapeStyle: Record<string, PortStyleProps | false> = {};
 
-    Object.keys(ports).forEach((key) => {
-      portsShapeStyle[key] = false;
-    });
+    Object.keys(ports).forEach((key) => (portsShapeStyle[key] = false));
 
     if (attributes.port === false || !attributes.ports?.length) return portsShapeStyle;
 
     const portStyle = subStyleProps<PortStyleProps>(this.getGraphicStyle(attributes), 'port');
-    const { ports: portOptions = [] } = attributes;
-    portOptions.forEach((option, index) => {
+    attributes.ports.forEach((option, index) => {
       const key = option.key || index;
       const mergedStyle = { ...portStyle, ...option };
       if (isSimplePort(mergedStyle)) {
@@ -324,7 +318,8 @@ export abstract class BaseNodeLike<S extends BaseNodeStyleProps = BaseNodeStyleP
   protected getPortXY(attributes: Required<S>, style: NodePortStyleProps): Point {
     const { placement = 'left' } = style;
     const keyShape = this.getShape('key');
-    return getPortXYByPlacement(getBoundsInOffscreen(this.context, keyShape), placement as PortPlacement);
+    const bbox = getBoundsInOffscreen(this.context, keyShape);
+    return getPortXYByPlacement(bbox, placement);
   }
 
   /**
