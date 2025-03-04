@@ -171,7 +171,7 @@ type ParsedBaseEdgeStyleProps = Required<BaseEdgeStyleProps>;
  * <en/> Base class of the edge
  */
 export abstract class BaseEdge extends BaseElement<BaseEdgeStyleProps> implements Edge {
-  public type = 'edge';
+  public type = 'edge' as const;
 
   static defaultStyleProps: Partial<BaseEdgeStyleProps> = {
     badge: true,

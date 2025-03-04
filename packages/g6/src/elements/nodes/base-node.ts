@@ -8,10 +8,10 @@ import type {
   Node,
   NodeBadgeStyleProps,
   NodeLabelStyleProps,
+  NodeLike,
   NodePortStyleProps,
   Point,
   Port,
-  PortPlacement,
   PortStyleProps,
   Prefix,
   Size,
@@ -176,23 +176,15 @@ export interface BaseNodeStyleProps
 }
 
 /**
- * <zh/> 节点元素的基类
+ * <zh/> 类节点元素的基类
  *
- * <en/> Base node class
- * @remarks
- * <zh/> 自定义节点时，建议将此类作为基类。这样，你只需要关注如何实现 keyShape 的绘制逻辑
- *
- * <zh/> 设计文档：https://www.yuque.com/antv/g6/gl1iof1xpzg6ed98
- *
- * <en/> When customizing a node, it is recommended to use this class as the base class. This way, you can directly focus on how to implement the drawing logic of keyShape
- *
- * <en/> Design document: https://www.yuque.com/antv/g6/gl1iof1xpzg6ed98
+ * <en/> Base node-like class
  */
-export abstract class BaseNode<S extends BaseNodeStyleProps = BaseNodeStyleProps>
+export abstract class BaseNodeLike<S extends BaseNodeStyleProps = BaseNodeStyleProps>
   extends BaseElement<S>
-  implements Node
+  implements NodeLike
 {
-  public type = 'node';
+  public type: 'node' | 'combo' = 'node';
 
   static defaultStyleProps: Partial<BaseNodeStyleProps> = {
     x: 0,
@@ -436,6 +428,26 @@ export abstract class BaseNode<S extends BaseNodeStyleProps = BaseNodeStyleProps
     this.drawBadgeShapes(this.parsedAttributes, this);
     this.drawLabelShape(this.parsedAttributes, this);
   }
+}
+
+/**
+ * <zh/> 节点元素的基类
+ *
+ * <en/> Base node class
+ * @remarks
+ * <zh/> 自定义节点时，建议将此类作为基类。这样，你只需要关注如何实现 keyShape 的绘制逻辑
+ *
+ * <zh/> 设计文档：https://www.yuque.com/antv/g6/gl1iof1xpzg6ed98
+ *
+ * <en/> When customizing a node, it is recommended to use this class as the base class. This way, you can directly focus on how to implement the drawing logic of keyShape
+ *
+ * <en/> Design document: https://www.yuque.com/antv/g6/gl1iof1xpzg6ed98
+ */
+export abstract class BaseNode<S extends BaseNodeStyleProps = BaseNodeStyleProps>
+  extends BaseNodeLike<S>
+  implements Node
+{
+  public type = 'node' as const;
 }
 
 /**

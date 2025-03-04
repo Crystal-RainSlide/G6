@@ -1,4 +1,4 @@
-export { BaseNode } from './base-node';
+export { BaseNode, BaseNodeLike } from './base-node';
 export { Circle } from './circle';
 export { Diamond } from './diamond';
 export { Donut } from './donut';

@@ -3,11 +3,18 @@ import type { ComboOptions, EdgeOptions, NodeOptions } from '../spec';
 import type { Point, Port } from '../types';
 
 /**
- * <zh/> 节点类型
+ * <zh/> 类节点类型，节点类型与组合类型的交集部分
  *
- * <en/> Node type
+ * <en/> Node-like type
  */
-export interface Node extends DisplayObject, ElementHooks, ElementMethods {
+export interface NodeLike extends DisplayObject, ElementHooks, ElementMethods {
+  /**
+   * <zh/> 元素类型（节点或组合）
+   *
+   * <en/> Element type (node or combo)
+   */
+  type: 'node' | 'combo';
+
   /**
    * <zh/> 获取连接桩
    *
@@ -16,9 +23,9 @@ export interface Node extends DisplayObject, ElementHooks, ElementMethods {
   getPorts(): Record<string, Port>;
 
   /**
-   * <zh/> 获取节点中心位置
+   * <zh/> 获取节点或组合的中心位置
    *
-   * <en/> Get the center position of the node
+   * <en/> Get the center position of the node or combo
    */
   getCenter(): Point;
 
@@ -38,18 +45,45 @@ export interface Node extends DisplayObject, ElementHooks, ElementMethods {
 }
 
 /**
+ * <zh/> 节点类型
+ *
+ * <en/> Node type
+ */
+export interface Node extends NodeLike {
+  /**
+   * <zh/> 元素类型（节点）
+   *
+   * <en/> Element type (node)
+   */
+  type: 'node';
+}
+
+/**
  * <zh/> 边类型
  *
  * <en/> Edge type
  */
-export interface Edge extends DisplayObject, ElementHooks, ElementMethods {}
+export interface Edge extends DisplayObject, ElementHooks, ElementMethods {
+  /**
+   * <zh/> 元素类型（边）
+   *
+   * <en/> Element type (edge)
+   */
+  type: 'edge';
+}
 
 /**
  * <zh/> 组合类型
  *
  * <en/> Combo type
  */
-export interface Combo extends Node {
+export interface Combo extends NodeLike {
+  /**
+   * <zh/> 元素类型（组合）
+   *
+   * <en/> Element type (combo)
+   */
+  type: 'combo';
   /**
    * <zh/> 获取组合的位置
    *

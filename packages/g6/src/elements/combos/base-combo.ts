@@ -19,8 +19,7 @@ import { subStyleProps } from '../../utils/prefix';
 import { parseSize } from '../../utils/size';
 import { mergeOptions } from '../../utils/style';
 import { add, divide } from '../../utils/vector';
-import type { BaseNodeStyleProps } from '../nodes';
-import { BaseNode } from '../nodes';
+import { BaseNodeLike, type BaseNodeStyleProps } from '../nodes';
 import { Icon, IconStyleProps } from '../shapes';
 import { connectImage, dispatchPositionChange } from '../shapes/image';
 
@@ -85,10 +84,10 @@ export interface BaseComboStyleProps
  * <en/> When customizing a combo, it is recommended to use this class as the base class. In this way, users only need to focus on the logic of drawing keyShape
  */
 export abstract class BaseCombo<S extends BaseComboStyleProps = BaseComboStyleProps>
-  extends BaseNode<S>
+  extends BaseNodeLike<S>
   implements Combo
 {
-  public type = 'combo';
+  public type = 'combo' as const;
 
   static defaultStyleProps: Partial<BaseComboStyleProps> = {
     childrenNode: [],
@@ -255,7 +254,7 @@ export abstract class BaseCombo<S extends BaseComboStyleProps = BaseComboStylePr
         ? keyframes
         : // 如果当前 combo 是展开状态，则动画不受 x, y, z, transform 影响，仅由子元素决定位置
           // If the current combo is in the expanded state, the animation is not affected by x, y, z, transform, and the position is determined only by the child elements
-          keyframes.map(({ x, y, z, transform, ...keyframe }: any) => keyframe),
+          keyframes.map(({ x, y, z, transform, ...keyframe }): Keyframe => keyframe),
       options,
     );
 
