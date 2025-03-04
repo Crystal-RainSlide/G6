@@ -1,6 +1,7 @@
 import { AABB, BaseStyleProps, DisplayObject, Line, LineStyleProps } from '@antv/g';
 import { isEqual } from '@antv/util';
 import { NodeEvent } from '../../constants';
+import { BaseNode } from '../../elements';
 import type { RuntimeContext } from '../../runtime/types';
 import type { ID, IDragEvent, Node } from '../../types';
 import { isVisible } from '../../utils/element';
@@ -222,12 +223,12 @@ export class Snapline extends BasePlugin<SnaplineOptions> {
    * @returns delta
    * @internal
    */
-  protected getDelta(event: IDragEvent<Node>) {
+  protected getDelta(event: IDragEvent<BaseNode>) {
     const zoom = this.context.graph.getZoom();
     return divide([event.dx, event.dy], zoom);
   }
 
-  private enableSnap = (event: IDragEvent<Node>) => {
+  private enableSnap = (event: IDragEvent<BaseNode>) => {
     const { target } = event;
 
     const threshold = 0.5;
@@ -334,7 +335,7 @@ export class Snapline extends BasePlugin<SnaplineOptions> {
     this.initSnapline();
   };
 
-  protected onDrag = async (event: IDragEvent<Node>) => {
+  protected onDrag = async (event: IDragEvent<BaseNode>) => {
     const { target } = event;
 
     if (this.options.autoSnap) {

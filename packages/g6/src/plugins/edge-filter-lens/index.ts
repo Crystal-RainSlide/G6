@@ -272,7 +272,6 @@ export class EdgeFilterLens extends BasePlugin<EdgeFilterLensOptions> {
       const elementType = graph.getElementType(id) as Exclude<ElementType, 'combo'>;
       const style = this.getElementStyle(elementType, datum);
 
-      // @ts-ignore
       cloneShape.update(style);
     };
 

@@ -7,8 +7,9 @@ import type {
   IAnimation,
 } from '@antv/g';
 import type { AnimationType } from '../constants';
+import { BaseCombo, BaseEdge, BaseNode } from '../elements';
 import type { ElementDatum } from './data';
-import type { Element, ElementType } from './element';
+import type { ElementType } from './element';
 import type { TransformOptions } from './viewport';
 
 export type IEvent =
@@ -27,9 +28,9 @@ export interface IWheelEvent<T extends Target = Target> extends TargetedEvent<Fe
 
 export interface IKeyboardEvent extends KeyboardEvent {}
 
-export interface IElementEvent extends IPointerEvent<Element> {}
+export interface IElementEvent extends IPointerEvent<TargetElement> {}
 
-export interface IElementDragEvent extends IDragEvent<Element> {}
+export interface IElementDragEvent extends IDragEvent<TargetElement> {}
 
 export interface IDragEvent<T extends Target = Target> extends TargetedEvent<FederatedPointerEvent, T> {
   dx: number;
@@ -75,4 +76,5 @@ type TargetedEvent<E extends FederatedEvent, T extends Target = Target> = Omit<E
   targetType: 'canvas' | 'node' | 'edge' | 'combo';
 };
 
-export type Target = Document | Element;
+export type TargetElement = BaseNode | BaseEdge | BaseCombo;
+export type Target = Document | TargetElement;

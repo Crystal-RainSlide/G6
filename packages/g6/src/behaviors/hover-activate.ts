@@ -2,7 +2,7 @@ import { isFunction } from '@antv/util';
 import { CommonEvent } from '../constants';
 import { ELEMENT_TYPES } from '../constants/element';
 import type { RuntimeContext } from '../runtime/types';
-import type { EdgeDirection, Element, ElementType, ID, IDragEvent, IPointerEvent, State } from '../types';
+import type { EdgeDirection, ElementType, ID, IDragEvent, IPointerEvent, State, TargetElement } from '../types';
 import { isToBeDestroyed } from '../utils/element';
 import { idsOf } from '../utils/id';
 import { getElementNthDegreeIds } from '../utils/relation';
@@ -124,7 +124,7 @@ export class HoverActivate extends BaseBehavior<HoverActivateOptions> {
     canvas.addEventListener(`${CommonEvent.DRAG_END}`, this.toggleFrozen);
   }
 
-  private hoverElement = (event: IPointerEvent<Element>) => {
+  private hoverElement = (event: IPointerEvent<TargetElement>) => {
     if (!this.validate(event)) return;
     const isEnter = event.type === CommonEvent.POINTER_ENTER;
     this.updateElementsState(event, isEnter);
@@ -134,7 +134,7 @@ export class HoverActivate extends BaseBehavior<HoverActivateOptions> {
     else onHoverEnd?.(event);
   };
 
-  protected getActiveIds(event: IPointerEvent<Element>) {
+  protected getActiveIds(event: IPointerEvent<TargetElement>) {
     const { graph } = this.context;
     const { degree, direction } = this.options;
     const elementId = event.target.id;
@@ -150,7 +150,7 @@ export class HoverActivate extends BaseBehavior<HoverActivateOptions> {
       : [elementId];
   }
 
-  private updateElementsState = (event: IPointerEvent<Element>, add: boolean) => {
+  private updateElementsState = (event: IPointerEvent<TargetElement>, add: boolean) => {
     if (!this.options.state && !this.options.inactiveState) return;
 
     const { graph } = this.context;
@@ -184,7 +184,7 @@ export class HoverActivate extends BaseBehavior<HoverActivateOptions> {
     return states;
   };
 
-  private validate(event: IPointerEvent<Element>) {
+  private validate(event: IPointerEvent<TargetElement>) {
     if (
       this.destroyed ||
       this.isFrozen ||

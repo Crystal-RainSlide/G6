@@ -2,7 +2,7 @@ import { isFunction } from '@antv/util';
 import { CanvasEvent, CommonEvent } from '../constants';
 import { ELEMENT_TYPES } from '../constants/element';
 import type { RuntimeContext } from '../runtime/types';
-import type { Element, ElementType, ID, IPointerEvent, State } from '../types';
+import type { ElementType, ID, IPointerEvent, State, TargetElement } from '../types';
 import { idOf } from '../utils/id';
 import { getElementNthDegreeIds } from '../utils/relation';
 import type { ShortcutKey } from '../utils/shortcut';
@@ -135,7 +135,7 @@ export class ClickSelect extends BaseBehavior<ClickSelectOptions> {
     graph.on(CanvasEvent.CLICK, this.onClickCanvas);
   }
 
-  private onClickSelect = async (event: IPointerEvent<Element>) => {
+  private onClickSelect = async (event: IPointerEvent<TargetElement>) => {
     if (!this.validate(event)) return;
     await this.updateState(event);
     this.options.onClick?.(event);
@@ -152,7 +152,7 @@ export class ClickSelect extends BaseBehavior<ClickSelectOptions> {
     return multiple && this.shortcut.match(trigger);
   }
 
-  private getNeighborIds(event: IPointerEvent<Element>) {
+  private getNeighborIds(event: IPointerEvent<TargetElement>) {
     const { target, targetType } = event;
     const { graph } = this.context;
     const { degree } = this.options;
@@ -164,7 +164,7 @@ export class ClickSelect extends BaseBehavior<ClickSelectOptions> {
     ).filter((id) => id !== target.id);
   }
 
-  private async updateState(event: IPointerEvent<Element>) {
+  private async updateState(event: IPointerEvent<TargetElement>) {
     const { state: selectState, unselectedState, neighborState, animation } = this.options;
     if (!selectState && !neighborState && !unselectedState) return;
 
